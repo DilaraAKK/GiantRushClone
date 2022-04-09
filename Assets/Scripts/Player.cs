@@ -11,16 +11,16 @@ public class Player : MonoBehaviour
     public Vector3 mousePosition;
     public float health;
     private bool isHurt = true;
-
+   public Color purpleColor;
 
     void Start()
     {
-      health = 10f;
+        health = 10f;
     }
 
 
     void Update()
-    {  
+    {
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, turnPoint.x - 1.5f, turnPoint.x + 1.5f), transform.position.y, transform.position.z);
         transform.position += transform.forward * Time.deltaTime * speed + transform.right * horizontal * 5;
 
@@ -28,13 +28,14 @@ public class Player : MonoBehaviour
         {
             horizontal = (Input.mousePosition.x - mousePosition.x) / Screen.width * 1.5f;
             mousePosition = Input.mousePosition;
-                
+
         }
         if (Input.GetMouseButtonDown(0))
         {
             mousePosition = Input.mousePosition;
 
         }
+
     }
     public void OnCollisionEnter(Collision collision)
     {
@@ -51,6 +52,15 @@ public class Player : MonoBehaviour
             {
                 Debug.Log("You died!");
             }
+        }
+        if (collision.gameObject.tag == "ColorChange")
+        {
+            
+            GetComponent<Renderer>().material.color = purpleColor;
+            Debug.Log("You hit a color change!");
+
+            
+
         }
     }
     public void hurt()

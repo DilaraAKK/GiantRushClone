@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public Vector3 mousePosition;
     public float health;
     private bool isHurt = true;
-   public Color purpleColor;
+    public Color purpleColor;
 
     void Start()
     {
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
             mousePosition = Input.mousePosition;
 
         }
-        if (Input.GetMouseButtonDown(0))
+        else
         {
             mousePosition = Input.mousePosition;
 
@@ -43,10 +43,12 @@ public class Player : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Debug.Log("You collected a collectible!");
+            transform.localScale += new Vector3(0.1f, 0.1f);
+            transform.position += new Vector3(0, 0.05f, 0);
         }
         if (collision.gameObject.tag == "Obstacle")
         {
-            Debug.Log("You hit an obstacle!");
+            Debug.Log("You hit and obstacle and failed");
             health -= 1;
             if (health <= 0)
             {
@@ -55,13 +57,16 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.tag == "ColorChange")
         {
-            
             GetComponent<Renderer>().material.color = purpleColor;
             Debug.Log("You hit a color change!");
-
-            
+        }
+        if (collision.gameObject.tag == "FinishLine")
+        {
+            Debug.Log("You finished the level!");
+            this.enabled = false;
 
         }
+        
     }
     public void hurt()
     {

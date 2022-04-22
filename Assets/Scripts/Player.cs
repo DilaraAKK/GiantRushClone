@@ -11,14 +11,17 @@ public class Player : MonoBehaviour
     public Vector3 mousePosition;
     public float health;
     private bool isHurt = true;
-    public Color purpleColor;
+    public Color orangeColor;
+    public Color greenColor;
+    public Color redColor;
+    Renderer rend;
 
     void Start()
     {
         health = 10f;
+        rend = GetComponent<Renderer>();
+        rend.material.color = orangeColor;
     }
-
-
     void Update()
     {
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, turnPoint.x - 1.5f, turnPoint.x + 1.5f), transform.position.y, transform.position.z);
@@ -28,23 +31,47 @@ public class Player : MonoBehaviour
         {
             horizontal = (Input.mousePosition.x - mousePosition.x) / Screen.width * 1.5f;
             mousePosition = Input.mousePosition;
-
         }
         else
         {
             mousePosition = Input.mousePosition;
-
         }
-
     }
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Collectible")
+        if (rend.material.color == orangeColor)
         {
-            Destroy(collision.gameObject);
-            Debug.Log("You collected a collectible!");
-            transform.localScale += new Vector3(0.1f, 0.1f);
-            transform.position += new Vector3(0, 0.05f, 0);
+            if (collision.gameObject.tag == "Orange")
+            {
+                Destroy(collision.gameObject);
+                Debug.Log("You touched the same color!");
+                transform.localScale += new Vector3(0.1f, 0.1f);
+                transform.position += new Vector3(0, 0.05f, 0);
+            }
+            else if (collision.gameObject.tag == "Green" || collision.gameObject.tag == "Red")
+            {
+                Destroy(collision.gameObject);
+                Debug.Log("You touched the different color!");
+                transform.localScale -= new Vector3(0.1f, 0.1f);
+                transform.position -= new Vector3(0, 0.05f, 0);
+            }
+        }
+        else if (rend.material.color == greenColor)
+        {
+            if (collision.gameObject.tag == "Green")
+            {
+                Destroy(collision.gameObject);
+                Debug.Log("You touched the same color!");
+                transform.localScale += new Vector3(0.1f, 0.1f);
+                transform.position += new Vector3(0, 0.05f, 0);
+            }
+            else if (collision.gameObject.tag == "Orange" || collision.gameObject.tag == "Red")
+            {
+                Destroy(collision.gameObject);
+                Debug.Log("You touched the different color!");
+                transform.localScale -= new Vector3(0.1f, 0.1f);
+                transform.position -= new Vector3(0, 0.05f, 0);
+            }
         }
         if (collision.gameObject.tag == "Obstacle")
         {
@@ -57,16 +84,14 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.tag == "ColorChange")
         {
-            GetComponent<Renderer>().material.color = purpleColor;
-            Debug.Log("You hit a color change!");
+            rend.material.color = greenColor;
+            Debug.Log("You hit a color change! Color is green!");
         }
         if (collision.gameObject.tag == "FinishLine")
         {
             Debug.Log("You finished the level!");
             this.enabled = false;
-
         }
-        
     }
     public void hurt()
     {
@@ -77,5 +102,4 @@ public class Player : MonoBehaviour
             Debug.Log("You are hurt!");
         }
     }
-
 }

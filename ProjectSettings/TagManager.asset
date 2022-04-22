@@ -8,6 +8,9 @@ TagManager:
   - Obstacle
   - ColorChange
   - FinishLine
+  - Green
+  - Orange
+  - Red
   layers:
   - Default
   - TransparentFX
